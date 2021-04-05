@@ -5,6 +5,8 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import metrics
 
 
 
@@ -48,21 +50,22 @@ if __name__ =='__main__':
 
     # train
     print('training model')
-    model = RandomForestRegressor(
-        n_estimators=args.n_estimators,
-        min_samples_leaf=args.min_samples_leaf,
-        n_jobs=-1)
+    #model = RandomForestRegressor(
+    #    n_estimators=args.n_estimators,
+    #    min_samples_leaf=args.min_samples_leaf,
+    #    n_jobs=-1)
+    model = DecisionTreeClassifier(criterion="entropy", max_depth=4)
     
     model.fit(X_train, y_train)
 
     # print abs error
-    print('validating model')
-    abs_err = np.abs(model.predict(X_val) - y_val)
+    y_pred = model.predict(X_val)
 
-    # print couple perf metrics
-    for q in [10, 50, 90]:
-        print('AE-at-' + str(q) + 'th-percentile: '
-              + str(np.percentile(a=abs_err, q=q)))
+    print('validating model')
+    print("validation:accuracy :",metrics.accuracy_score(y_val, y_pred.astype(int)))
+    
+    print("validation:auc :",metrics.roc_auc_score(y_val, y_pred))
+
         
     # persist model
     path = os.path.join(args.model_dir, "model.joblib")
