@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
+import numpy as np
 
 
 
@@ -50,11 +51,11 @@ if __name__ =='__main__':
 
     # train
     print('training model')
-    #model = RandomForestRegressor(
-    #    n_estimators=args.n_estimators,
-    #    min_samples_leaf=args.min_samples_leaf,
-    #    n_jobs=-1)
-    model = DecisionTreeClassifier(criterion="entropy", max_depth=4)
+    model = RandomForestRegressor(
+        n_estimators=args.n_estimators,
+        min_samples_leaf=args.min_samples_leaf,
+        n_jobs=-1)
+    #model = DecisionTreeClassifier(criterion="entropy", max_depth=4)
     
     model.fit(X_train, y_train)
 
@@ -62,7 +63,7 @@ if __name__ =='__main__':
     y_pred = model.predict(X_val)
 
     print('validating model')
-    print("validation:accuracy :",metrics.accuracy_score(y_val, y_pred.astype(int)))
+    print("validation:accuracy :",metrics.accuracy_score(y_val, np.round(y_pred,0)))
     
     print("validation:auc :",metrics.roc_auc_score(y_val, y_pred))
 

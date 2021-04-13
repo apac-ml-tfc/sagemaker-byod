@@ -63,7 +63,7 @@ if __name__ == "__main__":
     
     #X_test, X_val, y_test, y_val = train_test_split(X_test, y_test, test_size=0.5, random_state=1) # 50% test and 50% val
 
-    
+    df = pd.concat([df['Status'], df.drop(['Status'], axis=1)], axis=1)
     # Split the data
     train_data, validation_data, test_data = np.split(
         df.sample(frac=1, random_state=1729),
@@ -90,5 +90,5 @@ if __name__ == "__main__":
         f"{base_dir}/output/validation/validation.csv", header=True, index=False
     )
     pd.DataFrame(test_data).to_csv(
-        f"{base_dir}/output/test/test.csv", header=True, index=False
+        f"{base_dir}/output/test/test.csv", header=False, index=False
     )
